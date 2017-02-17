@@ -1,0 +1,5 @@
+<div>
+  <div *ngFor = "let comment of comments">{{comment.body}}</div>
+  <input class="form-control" type="text"  #author />
+  <input class="form-control" type="text" #input (keydown.enter)='comentar(input.value, author.value)' />
+</div>

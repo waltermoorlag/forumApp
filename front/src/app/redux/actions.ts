@@ -1,7 +1,21 @@
 import {Action, ActionCreator} from 'redux';
 import { User } from '../user.model'
-import { Post } from '../user.Post'
-import { Comment } from '../user.Comment'
+import { Post } from '../post.model'
+import { Comment } from '../comments/comment.model'
+
+
+export const LOGIN_USER:string='LOGIN_USER'
+export const LOGOUT_USER:string='LOGOUT_USER'
+export const EDIT_POST :string='EDIT_POST'
+export const CREATE_POST :string='CREATE_POST'
+export const DELETE_POST :string='DELETE_POST'
+export const CREATE_COMMENT:string='CREATE_COMMENT'
+export const EDIT_COMMENT :string='EDIT_COMMENT'
+export const DELETE_COMMENT :string='DELETE_COMMENT'
+export const CARGAR_POST :string='CARGAR_POST'
+export const POSTEANDO :string='POSTEANDO'
+export const NO_POSTEANDO :string='NO_POSTEANDO'
+
 
 
 export interface userAction extends Action {
@@ -11,9 +25,19 @@ export interface userAction extends Action {
 export interface postAction extends Action {
 	post: Post;
 }
+export interface postsAction extends Action {
+	posts: Post[];
+}
 
 export interface commentAction extends Action {
 	comment: Comment;
+}
+
+export const posteando :ActionCreator<Action>=()=>{
+	return {type: POSTEANDO,}
+}
+export const no_posteando :ActionCreator<Action>=()=>{
+	return {type: NO_POSTEANDO,}
 }
 
 export const login: ActionCreator<userAction> = (user: User)=>{
@@ -29,6 +53,10 @@ export const logout: ActionCreator<userAction> = (user: User)=>{
 export const create_post: ActionCreator<Action> = (post: Post)=>{
 	return {type: CREATE_POST,
 			post}
+}
+export const cargar_post: ActionCreator<Action> = (posts: Post[])=>{
+	return {type: CARGAR_POST,
+			posts}
 }
 
 export const edit_post: ActionCreator<postAction> = (post: Post)=>{

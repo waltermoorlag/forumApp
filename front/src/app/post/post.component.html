@@ -1,3 +1,7 @@
-<p>
-  post works!
-</p>
+<div *ngFor = "let post of posts" class="panel panel-primary">
+  <div class="panel-heading">{{post.title}} </div>
+  <div class="panel-body">{{post.body}}</div>
+  <div class="panel-footer">{{post.date}}</div>
+
+  <comments  [postId]='post._id' [comments]='post.comments'></comments>
+</div>

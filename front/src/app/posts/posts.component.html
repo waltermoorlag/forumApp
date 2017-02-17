@@ -1,3 +1,18 @@
-<p>
-  posts works!
-</p>
+<div *ngIf="isPosting">
+    <form [formGroup] = 'formPost' (ngSubmit)='onSubmit(formPost.value)'>
+
+        <input type="text" name="username"       placeholder="username" [formControl]='formPost.controls.username' />
+<br><br>
+        <input type="text" name="title"       placeholder="title" [formControl]='formPost.controls.title' />
+<br><br>
+        <textarea type="text" name="body"       placeholder="body" [formControl]='formPost.controls.body' ></textarea>
+<br><br>
+        <input type="submit">
+        <button (click)=fcHidePost() >Ocultar</button>
+    </form>
+</div>
+<div *ngIf="!isPosting">
+  <button (click)=fcShowPost() >POSTEAR</button>
+</div>
+<br><br>
+<post></post>

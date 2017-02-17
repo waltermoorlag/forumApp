@@ -5,13 +5,14 @@ import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import {LocationStrategy, HashLocationStrategy} from '@angular/common'
 import {Routes, RouterModule} from '@angular/router'
 import { API_URL, PlaceholderService} from './placeholder.service';
-
+import{store, AppStore} from './redux/store';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { UserComponent } from './user/user.component';
 import { ProfileComponent } from './profile/profile.component';
 import { PostComponent } from './post/post.component';
 import { PostsComponent } from './posts/posts.component';
+import { CommentsComponent } from './comments/comments.component';
 
 const routes:Routes=[
 {path:"", redirectTo:"posts", pathMatch:"full"},
@@ -32,7 +33,8 @@ const routes:Routes=[
     UserComponent,
     ProfileComponent,
     PostComponent,
-    PostsComponent
+    PostsComponent,
+    CommentsComponent
   ],
   imports: [
     BrowserModule,
@@ -41,8 +43,8 @@ const routes:Routes=[
     ReactiveFormsModule,
     RouterModule.forRoot(routes)
   ],
- 
-  providers: [{provide: LocationStrategy, useClass: HashLocationStrategy},
+
+  providers: [{provide: LocationStrategy, useClass: HashLocationStrategy} ,{provide:AppStore, useValue:store},
   {provide: API_URL, useValue: API_URL},
   PlaceholderService
   ],

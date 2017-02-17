@@ -1,12 +1,12 @@
-// import {Comment} from './comment.model';
+ import {Comment} from './comments/comment.model';
 
 export class Post {
   	author: String;
   	title: String;
   	body: String;
-  	date: date;
+  	date: Date;
   	comments: Comment[];
-  	
+
 	constructor(obj){
 	  	this.author=obj.author
 	  	this.title=obj.title
