@@ -12,8 +12,9 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 // import * as index from './routes/index';
 const index = require('./routes/index');
-// import * as users from './routes/users';
-const users = require('./routes/users');
+const login = require('./routes/login');
+const posts = require('./routes/posts');
+const comments = require('./routes/comments');
 
 const app = express();
 
@@ -60,7 +61,10 @@ app.use(allowCrossDomain);
 
 
 app.use('/', index);
-app.use('/users', users);
+app.use('/login', login);
+app.use('/post', posts);
+app.use('/comment', comments);
+
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
