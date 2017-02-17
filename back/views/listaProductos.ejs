@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prueba de Logueo</title>
+
+
+   <script type="text/javascript">
+
+   </script>
+   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+   <style>
+    img {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 5px;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+    }
+
+    img:hover {
+      box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    }
+    .clasprod{
+      border: 1px solid rgba(0, 140, 186, 0.5);
+      border-radius: 4px;
+      /*width: 100px;*/
+      /*height: 100px;*/
+    }
+</style>
+</head>
+<body>
+  <div class="col-md-12">
+    <% var i = 0; %> 
+    <% lista.forEach(function(item){ %>
+    <!-- <% i++ %> -->
+    <!-- <% if(!i<=6){} %> -->
+      
+      <div class="col-md-3 clasprod">
+        <div class="col-md-12">
+            <div class="col-md-12"><h3><%= item.nombre %></h3></div>
+              <!-- <div class="col-md-12"><li>descripcion: <%= item.descripcion %></li></div> -->
+              <!-- <div class="col-md-12"><li>precioLista: <%= item.precioLista %></li></div> -->
+              <div class="col-md-12">Contado: $<%= item.precioContado %></div>
+              <!-- <div class="col-md-12"><li>categoria: <%= item.categoria %></li></div> -->
+              <div class="col-md-12">stock: <%= item.stock %></div>
+              <div class="col-md-12"><img src="<%= urlServer %><%= item.imagen %>" width: "40px" heigth: "40px" ></div>
+              <div class="col-md-12">
+                  <% if(typeof item.botones!= 'undefined' && item.botones.length>0){ %>
+                  <%    item.botones.forEach(function(itemBot){ %>
+                    <button  type="button"  class="<%= itemBot.estilo %> col-md-4 button"><a href="<%= itemBot.href %>"><%= itemBot.label %></a></button>
+                  <%    }) %>
+                  <% } %>
+              </div>                
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</body>
+</html>

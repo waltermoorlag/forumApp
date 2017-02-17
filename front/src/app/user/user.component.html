@@ -1,0 +1,14 @@
+<div>
+    <form [formGroup] = 'formUser' (ngSubmit)='onSubmit(formUser.value)'>
+      
+        <input type="text" name="username"       placeholder="username" [formControl]='formUser.controls.username' />
+
+        <input type="text" name="password"       placeholder="password" [formControl]='formUser.controls.pwd' />
+
+        <input type="text" name="password2"       placeholder="confirm password" [formControl]='formUser.controls.pwdrepeat' />
+
+        <input type="text" name="name"       placeholder="name" [formControl]='formUser.controls.name' />
+
+        <input type="submit">
+    </form>
+</div>
