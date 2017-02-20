@@ -27,7 +27,6 @@ var CommentsComponent = (function () {
         var _this = this;
         var state = this.store.getState();
         var arrPost = state.posts.filter(function (item) { return item._id == _this.postId; });
-        console.log(arrPost);
         if (arrPost.length > 0) {
             this.comments = arrPost[0].comments;
         }
@@ -40,7 +39,12 @@ var CommentsComponent = (function () {
             author: author,
             body: input,
         });
-        this.placeholderService.createComment(newcomment, this.postId);
+        this.placeholderService.createComment(newcomment, this.postId, this.indice);
+    };
+    CommentsComponent.prototype.eliminar_comentario = function (id, indice_comentario) {
+        this.placeholderService.deleteComment(this.postId, this.indice, indice_comentario, id);
+    };
+    CommentsComponent.prototype.editar_comentario = function (id, indice_comentario) {
     };
     CommentsComponent.prototype.ngOnInit = function () {
     };
@@ -51,7 +55,7 @@ CommentsComponent = __decorate([
         selector: 'comments',
         templateUrl: './comments.component.html',
         styleUrls: ['./comments.component.css'],
-        inputs: ['comments', 'postId']
+        inputs: ['comments', 'postId', 'indice']
     }),
     __param(0, Inject(AppStore)),
     __metadata("design:paramtypes", [Object, ElementRef, PlaceholderService])

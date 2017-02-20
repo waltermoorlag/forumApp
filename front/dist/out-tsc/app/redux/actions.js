@@ -35,20 +35,23 @@ export var edit_post = function (post) {
     return { type: EDIT_POST,
         post: post };
 };
-export var delete_post = function (post) {
+export var delete_post = function (indexPost) {
     return { type: DELETE_POST,
-        post: post };
+        indexPost: indexPost };
 };
-export var create_comment = function (comment) {
+export var create_comment = function (index, comment) {
     return { type: CREATE_COMMENT,
-        comment: comment };
+        comment: comment,
+        index: index };
 };
-export var edit_comment = function (comment) {
+export var edit_comment = function (index, comment) {
     return { type: EDIT_COMMENT,
-        comment: comment };
+        comment: comment,
+        index: index };
 };
-export var delete_comment = function (comment) {
+export var delete_comment = function (indexPost, indexComment) {
     return { type: DELETE_COMMENT,
-        comment: comment };
+        indexPost: indexPost,
+        indexComment: indexComment };
 };
 //# sourceMappingURL=../../../../src/app/redux/actions.js.map

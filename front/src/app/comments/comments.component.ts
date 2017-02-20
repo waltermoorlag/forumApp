@@ -9,12 +9,12 @@ import {PlaceholderService} from '../placeholder.service'
   selector: 'comments',
   templateUrl: './comments.component.html',
   styleUrls: ['./comments.component.css'],
-  inputs: ['comments','postId']
+  inputs: ['comments','postId','indice']
 })
 export class CommentsComponent implements OnInit {
   comments: Comment[];
   postId: any;
-
+  indice: number;
 
   constructor(@Inject(AppStore) private store:Store<AppState>, private elemRef: ElementRef,public placeholderService: PlaceholderService) {
 
@@ -25,8 +25,7 @@ export class CommentsComponent implements OnInit {
    readState(){
      const state:AppState=this.store.getState();
      const arrPost:Post[] =state.posts.filter((item:any) => item._id == this.postId)
-     console.log(arrPost);
-     if(arrPost.length>0){
+         if(arrPost.length>0){
 
        this.comments=arrPost[0].comments
      }else{
@@ -39,10 +38,16 @@ export class CommentsComponent implements OnInit {
       author:author,
       body:input,
     })
-this.placeholderService.createComment(newcomment,this.postId)
+    this.placeholderService.createComment(newcomment,this.postId,this.indice)
 
   }
 
+  eliminar_comentario(id:string,indice_comentario:number){
+    this.placeholderService.deleteComment(this.postId,this.indice,indice_comentario,id)
+  }
+  editar_comentario(id:string,indice_comentario:number){
+    // this.placeholderService.editComment(this.postId,this.indice,indice_comentario,id)
+  }
   ngOnInit() {
   }
 }

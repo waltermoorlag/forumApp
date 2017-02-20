@@ -9,7 +9,7 @@ import * as AppActions from './redux/actions';
 import {AppState, AppStore} from './redux/store'
 import {Comment} from './comments/comment.model'
 
-export const API_URL ='http://10.6.6.210:3000/'
+export const API_URL ='http://10.6.6.98:3000/'
 
 @Injectable()
 export class PlaceholderService {
@@ -28,7 +28,7 @@ export class PlaceholderService {
   	let headers= new Headers({'Content-Type':'application/json'});
   	let options = new RequestOptions({headers: headers});
   	return this.http.post(`${API_URL}login/registrar`,body,options).
-  	map(rta => {    
+  	map(rta => {
       return  rta.json()})
 
   }
@@ -71,7 +71,7 @@ export class PlaceholderService {
         })
 
     }
-    createComment(comment:Comment, id:any):void{
+    createComment(comment:Comment, id:any,index:number):void{
       let body= JSON.stringify(comment);
       let headers= new Headers({'Content-Type':'application/json'});
       let options = new RequestOptions({headers: headers});
@@ -81,12 +81,36 @@ export class PlaceholderService {
           if(obj['error']){
             console.log(obj['msj'])
           }else{
-          this.store.dispatch(AppActions.create_comment(obj))
+          this.store.dispatch(AppActions.create_comment(index,obj))
           }
 
         })
-
     }
 
+deleteComment(postId:any,indicePost:number,indice_comentario:number,commentId:any):void{
+  this.http.delete(`${API_URL}comment/${commentId}`).
+  map(rta => {
+    return  rta.json()}).subscribe(obj=>{
+      if(obj['error']){
+        console.log(obj['msj'])
+      }else{
+        this.store.dispatch(AppActions.delete_comment(indicePost,indice_comentario))
+      }
+
+    })
+}
+
+deletePost(indicePost:number, postId:any, user:string):void{
+  this.http.delete(`${API_URL}post/${postId}/${user}`,).
+  map(rta => {
+    return  rta.json()}).subscribe(obj=>{
+      if(obj['error']){
+        console.log(obj['msj'])
+      }else{
+        this.store.dispatch(AppActions.delete_post(indicePost))
+      }
+
+    })
+}
 
  }

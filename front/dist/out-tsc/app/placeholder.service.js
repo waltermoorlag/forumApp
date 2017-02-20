@@ -15,7 +15,7 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs';
 import * as AppActions from './redux/actions';
 import { AppStore } from './redux/store';
-export var API_URL = 'http://10.6.6.210:3000/';
+export var API_URL = 'http://10.6.6.98:3000/';
 var PlaceholderService = (function () {
     function PlaceholderService(url, http, store) {
         this.url = url;
@@ -62,7 +62,7 @@ var PlaceholderService = (function () {
             }
         });
     };
-    PlaceholderService.prototype.createComment = function (comment, id) {
+    PlaceholderService.prototype.createComment = function (comment, id, index) {
         var _this = this;
         var body = JSON.stringify(comment);
         var headers = new Headers({ 'Content-Type': 'application/json' });
@@ -75,7 +75,35 @@ var PlaceholderService = (function () {
                 console.log(obj['msj']);
             }
             else {
-                _this.store.dispatch(AppActions.create_comment(obj));
+                _this.store.dispatch(AppActions.create_comment(index, obj));
+            }
+        });
+    };
+    PlaceholderService.prototype.deleteComment = function (postId, indicePost, indice_comentario, commentId) {
+        var _this = this;
+        this.http.delete(API_URL + "comment/" + commentId).
+            map(function (rta) {
+            return rta.json();
+        }).subscribe(function (obj) {
+            if (obj['error']) {
+                console.log(obj['msj']);
+            }
+            else {
+                _this.store.dispatch(AppActions.delete_comment(indicePost, indice_comentario));
+            }
+        });
+    };
+    PlaceholderService.prototype.deletePost = function (indicePost, postId, user) {
+        var _this = this;
+        this.http.delete(API_URL + "post/" + postId + "/" + user).
+            map(function (rta) {
+            return rta.json();
+        }).subscribe(function (obj) {
+            if (obj['error']) {
+                console.log(obj['msj']);
+            }
+            else {
+                _this.store.dispatch(AppActions.delete_post(indicePost));
             }
         });
     };

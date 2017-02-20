@@ -1,0 +1,12 @@
+.autorpost{
+  text-align: right;
+  margin-left:450px;
+  float: left;
+  position: fixed;
+  right: 1.5rem;
+  vertical-align:middle;
+}
+.empuja{
+  width:80%;
+  float: left;
+}

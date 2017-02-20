@@ -28,9 +28,16 @@ export interface postAction extends Action {
 export interface postsAction extends Action {
 	posts: Post[];
 }
-
+export interface postsdeleteAction extends Action {
+	indexPost: number;
+}
 export interface commentAction extends Action {
 	comment: Comment;
+	index:number;
+}
+export interface commentDeleteAction extends Action {
+	indexPost:number;
+	indexComment: number;
 }
 
 export const posteando :ActionCreator<Action>=()=>{
@@ -63,21 +70,24 @@ export const edit_post: ActionCreator<postAction> = (post: Post)=>{
 	return {type: EDIT_POST,
 			post}
 }
-export const delete_post: ActionCreator<postAction> = (post: Post)=>{
+export const delete_post: ActionCreator<postsdeleteAction> = (indexPost:number)=>{
 	return {type: DELETE_POST,
-			post}
+			indexPost}
 }
 
-export const create_comment: ActionCreator<commentAction> = (comment: Comment)=>{
+export const create_comment: ActionCreator<commentAction> = (index:number, comment: Comment)=>{
 	return {type: CREATE_COMMENT,
-			comment}
+			comment,
+			index}
 }
 
-export const edit_comment: ActionCreator<commentAction> = (comment: Comment)=>{
+export const edit_comment: ActionCreator<commentAction> = (index:number, comment: Comment)=>{
 	return {type: EDIT_COMMENT,
-			comment}
+			comment,
+			index}
 }
-export const delete_comment: ActionCreator<commentAction> = (comment: Comment)=>{
+export const delete_comment: ActionCreator<commentDeleteAction> = (indexPost:number,indexComment: number)=>{
 	return {type: DELETE_COMMENT,
-			comment}
+			indexPost,
+			indexComment}
 }

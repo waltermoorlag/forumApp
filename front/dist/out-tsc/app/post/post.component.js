@@ -12,10 +12,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 import { Component, Inject } from '@angular/core';
 import { AppStore } from '../redux/store';
+import { PlaceholderService } from '../placeholder.service';
 var PostComponent = (function () {
-    function PostComponent(store) {
+    function PostComponent(store, placeholderService) {
         var _this = this;
         this.store = store;
+        this.placeholderService = placeholderService;
         this.store.subscribe(function () { return _this.readState(); });
         this.readState();
     }
@@ -24,6 +26,10 @@ var PostComponent = (function () {
         this.posts = state.posts;
     };
     PostComponent.prototype.ngOnInit = function () {
+    };
+    PostComponent.prototype.eliminarPost = function (indicepost, postId) {
+        var user = "test";
+        this.placeholderService.deletePost(indicepost, postId, user);
     };
     return PostComponent;
 }());
@@ -34,7 +40,7 @@ PostComponent = __decorate([
         styleUrls: ['./post.component.css']
     }),
     __param(0, Inject(AppStore)),
-    __metadata("design:paramtypes", [Object])
+    __metadata("design:paramtypes", [Object, PlaceholderService])
 ], PostComponent);
 export { PostComponent };
 //# sourceMappingURL=../../../../src/app/post/post.component.js.map
