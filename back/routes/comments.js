@@ -12,10 +12,14 @@ const findPostById = (req, res, next) => {
     if (!err) {
     	req.post= result;
     	next();
+    } else {
+      res.send({error: true, msj: 'Error al buscar el post para el comentario' });
+      return;
     }
   })
 }
 const findUserByUsername = (req, res, next) => {
+	console.log(req.body)
   User.findOne({ username: req.body.author }, (err, result) => {
     if (err || !result) {
       res.send({error: true, msj: 'Usuario inexistente', registrar: true });
@@ -35,8 +39,16 @@ const newComment = (req, res, next) => {
           req.comment = result;
           req.post.comments.push(result._id)
           req.post.save((err, result)=>{
-            if(!err){   
-             next();
+            if(!err){
+			  Comment.findOne( {_id:req.comment._id} ).populate('author').exec((err, result) => {
+			  	if (!err) {
+			  		req.comment=result;
+			  		console.log(req.comment)
+			  		next()
+			  	}else{
+					res.send({error: true, msj:'Error al obtener nombre del usuario del comentario'});
+			  	}
+			  })
             } else {
 	          res.send({error: true, msj:'Error al guardar el comentario en el post'});
             }

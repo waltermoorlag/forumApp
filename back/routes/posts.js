@@ -7,8 +7,6 @@ const User = require('../models/users');
 const Post = require('../models/posts');
 //
 const verificaUserByUsername = (req, res, next) => {
-   // console.log('pasa por aca 1')
-
   User.findOne({ username: req.params.username }, (err, result) => {
     if (err || !result) {
       res.send({error: true, msj: 'Usuario inexistente', registrar: true });
@@ -64,9 +62,32 @@ const removePost = (req, res, next) => {
   });
 };
 
+const findPostById = (req, res, next) => {
+  Post.findOne({_id: req.params.postId },(err, result) => {
+    if (err || !result) {
+      res.send({ error: true, msj: 'Error al acceder al post' });
+      return;
+    }
+      req.post=result;
+      next();
+  });
+}
+const verificaPermisos = (req, res, next) => {
+   console.log(req.user._id.toString())
+   console.log(req.post.author.toString())
+   if (req.user._id.toString()==req.post.author.toString()){ 
+      next();
+    }else{
+      res.send({ error: true, msj: 'El usuario actual no tiene permisos para eliminar el post' });
+      return;
+      
+    }
+}
+
+
 //  LECTURA DE TODOS LOS POST
 router.get('/',  (req, res) => {
-  Post.find({ }).populate('author comments').sort('-date').exec((err, result) => {
+  Post.find({ }).populate('author comments', null, null, { populate: 'author' }).sort('-date').exec((err, result) => {
     if (err || !result) {
       res.send({ error: true, msj: 'Error al acceder a los posts' });
       return;
@@ -91,11 +112,11 @@ router.post('/:username', verificaUserByUsername, newPost, (req, res) => {
   res.send(req.post);
 });
 
-router.put('/:postId', editPost, (req, res) => {
+router.put('/:postId/:username',verificaUserByUsername, findPostById, verificaPermisos, editPost, (req, res) => {
   res.send(req.post);
 });
 
-router.delete('/:postId', removePost, (req, res) => {
+router.delete('/:postId/:username', verificaUserByUsername, findPostById, verificaPermisos, removePost, (req, res) => {
   res.send(req.post);
 });
 
