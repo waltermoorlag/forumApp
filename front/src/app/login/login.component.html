@@ -1,5 +1,6 @@
-<form action="" onsubmit="loginUser()">
-	Usuario: <input type="text" id="user">
-	Password: <input type="text" id="password">
+<form action="" (submit)="loginUser(username.value,pwd.value)">
+	Usuario: <input #username type="text" id="user">
+	Password: <input #pwd type="text" id="password">
 	<input type="submit">
 </form>
+<button (click)="registrarUser()">Registrarse</button>

@@ -3,6 +3,7 @@ import * as AppActions from './actions';
 import { Post } from '../post.model'
 import {OpaqueToken} from '@angular/core'
 import {Comment} from '../comments/comment.model'
+import {User} from '../user.model';
 
 export interface AppState{
 	user: {},
@@ -46,11 +47,13 @@ function postComments(state = [], action){
 
 const reducer: Reducer<AppState> = (state: AppState = initialState, action: Action) =>{
 	switch (action.type) {
+
 		case AppActions.LOGIN_USER:
-				return state;
+		 const newUser: User = (<AppActions.userAction>action).user;
+			return Object.assign({},state,{user: {logged:true, username:newUser.username}})
 
 		case AppActions.LOGOUT_USER:
-			return state;
+			return Object.assign({},state,{user: {logged:false, username:''}})
 
 		case AppActions.POSTEANDO:
 			return Object.assign({},state,{isPosting:true});
@@ -66,8 +69,30 @@ const reducer: Reducer<AppState> = (state: AppState = initialState, action: Acti
 		   const newPosts: Post[] =  (<AppActions.postsAction>action).posts
 			return Object.assign({},state,{isPosting:false, posts:[...state.posts, ...newPosts]});
 
+		case AppActions.EDITANDO_POST:
+		let indexEdit:number =  (<AppActions.commentAction>action).index
+		var postEditando = Object.assign({},state.posts[indexEdit],{ isEdit: !state.posts[indexEdit].isEdit});
+		return Object.assign({},state,{
+						posts:[
+						...state.posts.slice(0,indexEdit),
+						postEditando,
+						...state.posts.slice(indexEdit+1)
+					]
+			});
+
 		case AppActions.EDIT_POST:
-			return state;
+		let indexofPost:number=(<AppActions.postEditAction>action).indexPost
+		let titlepost:string=(<AppActions.postEditAction>action).title
+		let bodypost:string=(<AppActions.postEditAction>action).body
+			var postEditar = Object.assign({},state.posts[indexofPost],{ isEdit: false,title:titlepost ,body:bodypost});
+		return Object.assign({},state,{
+						posts:[
+						...state.posts.slice(0,indexofPost),
+						postEditar,
+						...state.posts.slice(indexofPost+1)
+					]
+			});
+
 
 		case AppActions.DELETE_POST:
 		let indexposte:number =  (<AppActions.postsdeleteAction>action).indexPost
@@ -81,11 +106,11 @@ const reducer: Reducer<AppState> = (state: AppState = initialState, action: Acti
 
 		case AppActions.CREATE_COMMENT:
 			let index:number =  (<AppActions.commentAction>action).index
-			var post = Object.assign({},state.posts[index],{ comments: postComments(state.posts[index].comments,(<AppActions.commentAction>action))});
+			var postCreate = Object.assign({},state.posts[index],{ comments: postComments(state.posts[index].comments,(<AppActions.commentAction>action))});
 			return Object.assign({},state,{
 			  	    posts:[
 							...state.posts.slice(0,index),
-				     	post,
+				     	postCreate,
 							...state.posts.slice(index+1)
 						]
 				});

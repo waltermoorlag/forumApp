@@ -1,8 +1,13 @@
+<div *ngIf="!islogged">
+  <login></login>
+</div>
+<div *ngIf="islogged">Bienvenido {{username}}
+  <button (click)='logout_user()'>&#10060;</button>
+</div>
+
+
 <div *ngIf="isPosting">
     <form [formGroup] = 'formPost' (ngSubmit)='onSubmit(formPost.value)'>
-
-        <input type="text" name="username"       placeholder="username" [formControl]='formPost.controls.username' />
-<br><br>
         <input type="text" name="title"       placeholder="title" [formControl]='formPost.controls.title' />
 <br><br>
         <textarea type="text" name="body"       placeholder="body" [formControl]='formPost.controls.body' ></textarea>

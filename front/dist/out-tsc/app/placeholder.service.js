@@ -50,7 +50,8 @@ var PlaceholderService = (function () {
     };
     PlaceholderService.prototype.cargarPost = function () {
         var _this = this;
-        this.http.get(API_URL + "post").
+        var options = new RequestOptions({ withCredentials: true });
+        this.http.get(API_URL + "post", options).
             map(function (rta) {
             return rta.json();
         }).subscribe(function (obj) {
@@ -93,6 +94,23 @@ var PlaceholderService = (function () {
             }
         });
     };
+    PlaceholderService.prototype.editPost = function (indexPost, postId, username, title, cuerpo) {
+        var _this = this;
+        var body = JSON.stringify({ title: title, body: cuerpo });
+        var headers = new Headers({ 'Content-Type': 'application/json' });
+        var options = new RequestOptions({ headers: headers, withCredentials: true });
+        this.http.put(API_URL + "post/" + postId + "/" + username, body, options).
+            map(function (rta) {
+            return rta.json();
+        }).subscribe(function (obj) {
+            if (obj['error']) {
+                console.log(obj['msj']);
+            }
+            else {
+                _this.store.dispatch(AppActions.edit_post(indexPost, title, cuerpo));
+            }
+        });
+    };
     PlaceholderService.prototype.deletePost = function (indicePost, postId, user) {
         var _this = this;
         this.http.delete(API_URL + "post/" + postId + "/" + user).
@@ -104,6 +122,60 @@ var PlaceholderService = (function () {
             }
             else {
                 _this.store.dispatch(AppActions.delete_post(indicePost));
+            }
+        });
+    };
+    PlaceholderService.prototype.loginUser = function (username, pwd) {
+        var _this = this;
+        var body = JSON.stringify({ username: username, pwd: pwd });
+        var headers = new Headers({ 'Content-Type': 'application/json' });
+        var options = new RequestOptions({ headers: headers, withCredentials: true });
+        this.http.post(API_URL + "login", body, options).
+            map(function (rta) {
+            return rta.json();
+        }).subscribe(function (obj) {
+            if (obj['error']) {
+                console.log(obj['msj']);
+            }
+            else {
+                _this.store.dispatch(AppActions.login_user(obj));
+            }
+        });
+    };
+    PlaceholderService.prototype.logout = function (username) {
+        var _this = this;
+        var body = JSON.stringify({ username: username });
+        var headers = new Headers({ 'Content-Type': 'application/json' });
+        var options = new RequestOptions({ headers: headers, withCredentials: true });
+        this.http.post(API_URL + "login/logout", body, options).
+            map(function (rta) {
+            return rta.json();
+        }).subscribe(function (obj) {
+            if (obj['error']) {
+                console.log(obj['msj']);
+            }
+            else {
+                console.log('msj de deslogueo', obj);
+                _this.store.dispatch(AppActions.logout());
+            }
+        });
+    };
+    PlaceholderService.prototype.verificaToken = function () {
+        var _this = this;
+        var body = JSON.stringify({});
+        var headers = new Headers({ 'Content-Type': 'application/json' });
+        var options = new RequestOptions({ headers: headers, withCredentials: true });
+        this.http.post(API_URL + "login/verificauser", body, options).
+            map(function (rta) {
+            return rta.json();
+        }).subscribe(function (obj) {
+            if (obj['error']) {
+                console.log(obj['msj']);
+            }
+            else {
+                console.log(obj);
+                if (obj)
+                    _this.store.dispatch(AppActions.login_user(obj));
             }
         });
     };

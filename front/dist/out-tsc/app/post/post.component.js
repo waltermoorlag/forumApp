@@ -11,8 +11,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 import { Component, Inject } from '@angular/core';
-import { AppStore } from '../redux/store';
 import { PlaceholderService } from '../placeholder.service';
+import * as AppActions from '../redux/actions';
+import { AppStore } from '../redux/store';
 var PostComponent = (function () {
     function PostComponent(store, placeholderService) {
         var _this = this;
@@ -24,12 +25,21 @@ var PostComponent = (function () {
     PostComponent.prototype.readState = function () {
         var state = this.store.getState();
         this.posts = state.posts;
+        this.username = state.user['username'];
+    };
+    PostComponent.prototype.editarPost = function (index) {
+        this.store.dispatch(AppActions.editandoPost(index));
     };
     PostComponent.prototype.ngOnInit = function () {
     };
+    PostComponent.prototype.editaPost = function (i, PostId, title, body) {
+        this.placeholderService.editPost(i, PostId, this.username, title, body);
+    };
+    PostComponent.prototype.cancelEdit = function (index) {
+        this.store.dispatch(AppActions.editandoPost(index));
+    };
     PostComponent.prototype.eliminarPost = function (indicepost, postId) {
-        var user = "test";
-        this.placeholderService.deletePost(indicepost, postId, user);
+        this.placeholderService.deletePost(indicepost, postId, this.username);
     };
     return PostComponent;
 }());

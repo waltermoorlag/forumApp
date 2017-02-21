@@ -59,7 +59,8 @@ export class PlaceholderService {
     }
 
     cargarPost():void{
-      this.http.get(`${API_URL}post`).
+      let options = new RequestOptions({ withCredentials: true});
+      this.http.get(`${API_URL}post`,options).
       map(rta => {
         return  rta.json()}).subscribe(obj=>{
           if(obj['error']){
@@ -99,6 +100,21 @@ deleteComment(postId:any,indicePost:number,indice_comentario:number,commentId:an
 
     })
 }
+editPost(indexPost:number, postId:string, username:string, title:string, cuerpo:string):void{
+  let body= JSON.stringify({title,body:cuerpo});
+  let headers= new Headers({'Content-Type':'application/json'});
+  let options = new RequestOptions({headers: headers, withCredentials: true});
+  this.http.put(`${API_URL}post/${postId}/${username}`,body,options).
+  map(rta => {
+    return  rta.json()}).subscribe(obj=>{
+      if(obj['error']){
+        console.log(obj['msj'])
+      }else{
+      this.store.dispatch(AppActions.edit_post(indexPost,title,cuerpo))
+      }
+
+    })
+}
 
 deletePost(indicePost:number, postId:any, user:string):void{
   this.http.delete(`${API_URL}post/${postId}/${user}`,).
@@ -113,4 +129,52 @@ deletePost(indicePost:number, postId:any, user:string):void{
     })
 }
 
- }
+loginUser(username:string, pwd:string):void{
+  let body= JSON.stringify({username, pwd});
+  let headers= new Headers({'Content-Type':'application/json'});
+  let options = new RequestOptions({headers: headers,withCredentials: true});
+  this.http.post(`${API_URL}login`,body,options).
+  map(rta => {
+    return  rta.json()}).subscribe(obj=>{
+      if(obj['error']){
+        console.log(obj['msj'])
+      }else{
+        this.store.dispatch(AppActions.login_user(obj))
+      }
+    })
+}
+logout(username:string):void{
+  let body= JSON.stringify({username});
+  let headers= new Headers({'Content-Type':'application/json'});
+  let options = new RequestOptions({headers: headers,withCredentials: true});
+  this.http.post(`${API_URL}login/logout`,body,options).
+  map(rta => {
+    return  rta.json()}).subscribe(obj=>{
+      if(obj['error']){
+        console.log(obj['msj'])
+      }else{
+        console.log('msj de deslogueo',obj)
+
+        this.store.dispatch(AppActions.logout())
+      }
+    })
+  }
+  verificaToken():void{
+    let body=JSON.stringify({});
+    let headers= new Headers({'Content-Type':'application/json'});
+    let options = new RequestOptions({headers: headers,withCredentials: true});
+    this.http.post(`${API_URL}login/verificauser`,body,options).
+    map(rta => {
+      return  rta.json()}).subscribe(obj=>{
+        if(obj['error']){
+          console.log(obj['msj'])
+        }else{
+          console.log(obj)
+          if(obj)
+
+            this.store.dispatch(AppActions.login_user(obj))
+        }
+      })
+
+  }
+}

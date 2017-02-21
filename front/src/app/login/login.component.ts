@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {PlaceholderService} from '../placeholder.service';
+import {Router} from '@angular/router'
 
 @Component({
   selector: 'login',
@@ -7,13 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  constructor(public placeholderService: PlaceholderService, public router: Router) { }
 
   ngOnInit() {
   }
 
-  loginUser(){
-  	
+  loginUser(username,pwd){
+this.placeholderService.loginUser(username,pwd)
   }
-
+registrarUser(){
+  this.router.navigate(['users']);
+}
 }

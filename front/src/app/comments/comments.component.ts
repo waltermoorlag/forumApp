@@ -46,8 +46,9 @@ export class CommentsComponent implements OnInit {
     this.placeholderService.deleteComment(this.postId,this.indice,indice_comentario,id)
   }
   editar_comentario(id:string,indice_comentario:number){
-    // this.placeholderService.editComment(this.postId,this.indice,indice_comentario,id)
+
   }
   ngOnInit() {
   }
 }
+// this.placeholderService.editComment(this.postId,this.indice,indice_comentario,id)

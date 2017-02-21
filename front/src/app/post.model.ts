@@ -6,6 +6,7 @@ export class Post {
   	body: String;
   	date: Date;
   	comments: Comment[];
+    isEdit: boolean;
 
 	constructor(obj){
 	  	this.author=obj.author
@@ -13,5 +14,6 @@ export class Post {
 	  	this.body=obj.body
 	  	this.date=obj.date
 	  	this.comments=obj.comments
+      this.isEdit=obj.isEdit || false
 	}
 }

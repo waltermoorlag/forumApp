@@ -9,19 +9,20 @@ export var DELETE_COMMENT = 'DELETE_COMMENT';
 export var CARGAR_POST = 'CARGAR_POST';
 export var POSTEANDO = 'POSTEANDO';
 export var NO_POSTEANDO = 'NO_POSTEANDO';
+export var EDITANDO_POST = 'EDITANDO_POST';
 export var posteando = function () {
     return { type: POSTEANDO, };
 };
 export var no_posteando = function () {
     return { type: NO_POSTEANDO, };
 };
-export var login = function (user) {
+export var login_user = function (user) {
     return { type: LOGIN_USER,
         user: user };
 };
-export var logout = function (user) {
-    return { type: LOGOUT_USER,
-        user: user };
+export var logout = function () {
+    return { type: LOGOUT_USER
+    };
 };
 export var create_post = function (post) {
     return { type: CREATE_POST,
@@ -30,10 +31,6 @@ export var create_post = function (post) {
 export var cargar_post = function (posts) {
     return { type: CARGAR_POST,
         posts: posts };
-};
-export var edit_post = function (post) {
-    return { type: EDIT_POST,
-        post: post };
 };
 export var delete_post = function (indexPost) {
     return { type: DELETE_POST,
@@ -53,5 +50,15 @@ export var delete_comment = function (indexPost, indexComment) {
     return { type: DELETE_COMMENT,
         indexPost: indexPost,
         indexComment: indexComment };
+};
+export var editandoPost = function (index) {
+    return { type: EDITANDO_POST,
+        index: index };
+};
+export var edit_post = function (indexPost, title, body) {
+    return { type: EDIT_POST,
+        indexPost: indexPost,
+        title: title,
+        body: body };
 };
 //# sourceMappingURL=../../../../src/app/redux/actions.js.map

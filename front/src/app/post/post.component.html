@@ -1,13 +1,37 @@
 <div *ngFor = "let post of posts ; let i = index" class="panel panel-primary">
 
-  <div class="col-xs-12 panel-heading">
+  <div *ngIf="post.isEdit">
+    <div class="input-group">
+      <span class="input-group-addon">
+         <option  value=''>Title</option>
+      </span>
+      <input class="form-control" type="text"  #titleEdit value="{{post.title}}"/>
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon">
+
+           <option value=''>Body</option>
+
+       </span>
+      <input class="form-control" type="text"  #bodyEdit value="{{post.body}}"/>
+
+     </div>
+<button (click)="editaPost(i, post._id, titleEdit.value, bodyEdit.value )" >&#10004;</button> <button (click)="cancelEdit(i)">&#10008;</button>
+  </div>
+
+  <div *ngIf="!post.isEdit" class="col-xs-12 panel-heading">
       <div class="col-xs-9"> {{post.title}} </div>
       <div class="col-xs-1"><strong> {{post.author.name}}</strong> </div>
+
+
+
+     <div *ngIf='post.author.username==username'>
       <div class="col-xs-1"><button (click)=eliminarPost(i,post._id) class="btn btn-danger">Eliminar</button></div>
-      <div class="col-xs-1"><button class="btn btn-info">Edit</button></div>
+      <div class="col-xs-1"><button (click)=editarPost(i) class="btn btn-info">Edit</button></div>
+    </div>
 
   </div>
-  <div class="panel-body">{{post.body}}</div>
+  <div *ngIf="!post.isEdit" class="panel-body">{{post.body}}</div>
   <div class="panel-footer">{{post.date}}</div>
 
   <comments [indice]='i' [postId]='post._id' [comments]='post.comments'></comments>

@@ -15,7 +15,7 @@ export const DELETE_COMMENT :string='DELETE_COMMENT'
 export const CARGAR_POST :string='CARGAR_POST'
 export const POSTEANDO :string='POSTEANDO'
 export const NO_POSTEANDO :string='NO_POSTEANDO'
-
+export const EDITANDO_POST :string='EDITANDO_POST'
 
 
 export interface userAction extends Action {
@@ -40,6 +40,13 @@ export interface commentDeleteAction extends Action {
 	indexComment: number;
 }
 
+export interface postEditAction extends Action {
+	indexPost:number;
+	title:string;
+	body:string;
+
+}
+
 export const posteando :ActionCreator<Action>=()=>{
 	return {type: POSTEANDO,}
 }
@@ -47,14 +54,14 @@ export const no_posteando :ActionCreator<Action>=()=>{
 	return {type: NO_POSTEANDO,}
 }
 
-export const login: ActionCreator<userAction> = (user: User)=>{
+export const login_user: ActionCreator<userAction> = (user: User)=>{
 	return {type: LOGIN_USER,
 			user}
 }
 
-export const logout: ActionCreator<userAction> = (user: User)=>{
-	return {type: LOGOUT_USER,
-			user}
+export const logout: ActionCreator<Action> = ()=>{
+	return {type: LOGOUT_USER
+			}
 }
 
 export const create_post: ActionCreator<Action> = (post: Post)=>{
@@ -66,10 +73,6 @@ export const cargar_post: ActionCreator<Action> = (posts: Post[])=>{
 			posts}
 }
 
-export const edit_post: ActionCreator<postAction> = (post: Post)=>{
-	return {type: EDIT_POST,
-			post}
-}
 export const delete_post: ActionCreator<postsdeleteAction> = (indexPost:number)=>{
 	return {type: DELETE_POST,
 			indexPost}
@@ -90,4 +93,16 @@ export const delete_comment: ActionCreator<commentDeleteAction> = (indexPost:num
 	return {type: DELETE_COMMENT,
 			indexPost,
 			indexComment}
+}
+
+export const editandoPost: ActionCreator<Action> =  (index: number) => {
+	return {type: EDITANDO_POST,
+			index}
+}
+
+export const edit_post: ActionCreator<postEditAction> = (indexPost:number, title:string, body:string)=>{
+	return {type: EDIT_POST,
+			indexPost,
+			title,
+			body}
 }

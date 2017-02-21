@@ -15,6 +15,8 @@ import {AppState, AppStore} from '../redux/store'
 export class PostsComponent implements OnInit {
  formPost: FormGroup;
  isPosting:boolean;
+ islogged:boolean;
+ username:string;
 
 
 
@@ -34,34 +36,23 @@ constructor(fb: FormBuilder, public placeholderService: PlaceholderService, publ
  readState(){
    const state:AppState=this.store.getState();
    this.isPosting=state.isPosting
+   this.islogged=state.user['logged']
+   this.username=state.user['username']
  }
 
-
-
-
-
+logout_user():void{
+  this.placeholderService.logout(this.username)
+}
 
 onSubmit(formPost):void{
       const aPost= new Post ({
-        author:formPost.username,
+        author:this.username,
         title:formPost.title,
         body:formPost.body,
       })
-
-this.placeholderService.createPost(aPost)
-
-
-// this.placeholderService.createPost(aPost).subscribe(obj=>{
-//   console.log(obj)
-//   if(obj['error']){
-//     console.log(obj['msj'])
-//   }else{
-//   this.store.dispatch(AppActions.create_post(obj))
-//   }
-//
-// })
-
+      this.placeholderService.createPost(aPost)
 }
+
 fcShowPost(){
 this.store.dispatch(AppActions.posteando())
 }
@@ -70,6 +61,7 @@ this.store.dispatch(AppActions.no_posteando())
 }
 
 ngOnInit() {
+  this.placeholderService.verificaToken()
   this.placeholderService.cargarPost()
 }
 

@@ -31,9 +31,10 @@ var reducer = function (state, action) {
     if (state === void 0) { state = initialState; }
     switch (action.type) {
         case AppActions.LOGIN_USER:
-            return state;
+            var newUser = action.user;
+            return Object.assign({}, state, { user: { logged: true, username: newUser.username } });
         case AppActions.LOGOUT_USER:
-            return state;
+            return Object.assign({}, state, { user: { logged: false, username: '' } });
         case AppActions.POSTEANDO:
             return Object.assign({}, state, { isPosting: true });
         case AppActions.NO_POSTEANDO:
@@ -44,8 +45,24 @@ var reducer = function (state, action) {
         case AppActions.CARGAR_POST:
             var newPosts = action.posts;
             return Object.assign({}, state, { isPosting: false, posts: state.posts.concat(newPosts) });
+        case AppActions.EDITANDO_POST:
+            var indexEdit = action.index;
+            var postEditando = Object.assign({}, state.posts[indexEdit], { isEdit: !state.posts[indexEdit].isEdit });
+            return Object.assign({}, state, {
+                posts: state.posts.slice(0, indexEdit).concat([
+                    postEditando
+                ], state.posts.slice(indexEdit + 1))
+            });
         case AppActions.EDIT_POST:
-            return state;
+            var indexofPost = action.indexPost;
+            var titlepost = action.title;
+            var bodypost = action.body;
+            var postEditar = Object.assign({}, state.posts[indexofPost], { isEdit: false, title: titlepost, body: bodypost });
+            return Object.assign({}, state, {
+                posts: state.posts.slice(0, indexofPost).concat([
+                    postEditar
+                ], state.posts.slice(indexofPost + 1))
+            });
         case AppActions.DELETE_POST:
             var indexposte = action.indexPost;
             return Object.assign({}, state, {
@@ -53,10 +70,10 @@ var reducer = function (state, action) {
             });
         case AppActions.CREATE_COMMENT:
             var index = action.index;
-            var post = Object.assign({}, state.posts[index], { comments: postComments(state.posts[index].comments, action) });
+            var postCreate = Object.assign({}, state.posts[index], { comments: postComments(state.posts[index].comments, action) });
             return Object.assign({}, state, {
                 posts: state.posts.slice(0, index).concat([
-                    post
+                    postCreate
                 ], state.posts.slice(index + 1))
             });
         case AppActions.EDIT_COMMENT:
