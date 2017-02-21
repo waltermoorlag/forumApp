@@ -16,7 +16,10 @@ const Categorias = require('../config/categorias');
 // FUNCIONES
 //
 router.get('/',  (req, res) => {
-  res.send({ msj:'Welcome to ForumApp'});
+
+  
+  console.log(' PASO POR AQUI ')
+  // res.send({ msj:'Welcome to ForumApp'});
 });
 
 

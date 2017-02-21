@@ -7,6 +7,7 @@ const User = require('../models/users');
 const Post = require('../models/posts');
 //
 const verificaUserByUsername = (req, res, next) => {
+ console.log('cookies ',req.cookies)
   User.findOne({ username: req.params.username }, (err, result) => {
     if (err || !result) {
       res.send({error: true, msj: 'Usuario inexistente', registrar: true });
@@ -16,6 +17,19 @@ const verificaUserByUsername = (req, res, next) => {
     next();
   });
 };
+
+const findPostPopulate=(req, res, next)=>{
+	Post.findOne({_id: req.idPost}).populate('author comments').exec((err, result)=>{
+		if (!err) {
+		  req.post=result
+	   	  next();	
+		}else {
+   		  res.send({error: true, msj:'Error al recuperar el post'});
+		}
+	})
+
+}
+
 
 const newPost = (req, res, next) => {
   Post.create({
@@ -27,9 +41,11 @@ const newPost = (req, res, next) => {
         if (!err) {
           req.post = result;
           req.user.posts.push(result._id)
+          const idPost=result._id;
           req.user.save((err, result)=>{
              if (!err){
-                next();            
+             	req.idPost=idPost;
+             	next(); 
               } else {
                 res.send({error: true, msj:'Error al guardar el post  en el usuario'});
               }
@@ -41,9 +57,10 @@ const newPost = (req, res, next) => {
 };
 
 const editPost = (req, res, next) => {
+	console.log('Edit Post => ',req.body)
    Post.findOneAndUpdate({_id:req.params.postId}, req.body, function (err, result) {
     if (!err){
-      req.post = result;
+      req.idPost = result._id;
       next();
     } else {
       res.send({error: true, msj:'Error al actualizar el post '});
@@ -87,6 +104,7 @@ const verificaPermisos = (req, res, next) => {
 
 //  LECTURA DE TODOS LOS POST
 router.get('/',  (req, res) => {
+ console.log('cookies ',req.cookies)
   Post.find({ }).populate('author comments', null, null, { populate: 'author' }).sort('-date').exec((err, result) => {
     if (err || !result) {
       res.send({ error: true, msj: 'Error al acceder a los posts' });
@@ -98,6 +116,7 @@ router.get('/',  (req, res) => {
 
 // LECTURA DE LOS POSTS DE UN USUARIO : USERNAME
 router.get('/:username',  (req, res) => {
+ console.log('cookies ',req.cookies)
   User.findOne({ username: req.params.username }).populate('posts' , null, null, {sort: { date: -1 }}).exec((err, result) => {
     if (err || !result) {
       res.send({ error: true, msj: 'Error al acceder al los post de => '+req.params.username });
@@ -108,11 +127,11 @@ router.get('/:username',  (req, res) => {
 });
 
 //  ALTA DEL POST DEL USUARIO
-router.post('/:username', verificaUserByUsername, newPost, (req, res) => {
+router.post('/:username', verificaUserByUsername, newPost, findPostPopulate,(req, res) => {
   res.send(req.post);
 });
 
-router.put('/:postId/:username',verificaUserByUsername, findPostById, verificaPermisos, editPost, (req, res) => {
+router.put('/:postId/:username',verificaUserByUsername, findPostById, verificaPermisos, editPost, findPostPopulate,(req, res) => {
   res.send(req.post);
 });
 

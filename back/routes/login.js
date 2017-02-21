@@ -54,19 +54,20 @@ const validaExistencia = (req, res, next) => {
 };
 
 const verificaToken = (req, res, next) => {
-  console.log('token',req.cookies.id_token)
-  req.generateToken = false;
+  console.log('token del verifiar token => ',req.cookies.id_token)
   if (typeof req.cookies.id_token != 'object') { 
-    req.generateToken = true;
-    next();
+    res.send({error: true, msj: 'Usuario no logueado ' });
+    // next();
     return;
   }
   User.findOne({ token: (req.cookies.id_token.token_ || 'blank') }, (err, result) => {
     if (!err || result) {
-      return res.send({msj:'usted se encuentra logueado'});    
+      req.user=result
+      next();
+    } else {
+   	  res.send({error: true, msj: 'Usuario no logueado ' });
+	  return;
     }
-    req.generateToken = true;    
-    next();
   });
 };
 
@@ -77,9 +78,10 @@ const verificaUsuario = (req, res, next) => {
     if (err || !result) {
       res.send({error: true, msj: 'Usuario inexistente', registrar: true });
       return;
+    } else {
+    	req.user = result;
+    	next();
     }
-    req.user = result;
-    next();
   });
 };
 
@@ -91,24 +93,40 @@ const responseToken = (req,res,next) => {
     next();
 };
 
-const autUser = (req, res, next) => {
+
+const verificaPass = (req, res, next)=>{
   if (!req.user.authenticate(req.body.pwd)) {
     res.send({error: true, msj:'contraseña incorrecta'});
   } else {
-   if (req.generateToken){
+  	next();
+  }
+
+}
+const autUser = (req, res, next) => {
         req.user.token = req.user.generateToken();
         req.user.save((err,result) => {
           if (!err) {
             responseToken(req,res,next);
           }            
         });
-    } else {
-      responseToken(req,res,next);
-    }
-  }
 };
 
-router.post('/', verificaToken,verificaUsuario, autUser, (req, res) => {
+const logout = (req, res, next) => {
+	// var query = {'username':req.body.username};
+	req.user.token='--------';
+	req.user.save((err, result)=>{
+        if (!err) {
+        	console.log('result del borrado del token', result);
+        	req.user=result;
+        	next();
+        } else {
+		    res.send({error: true, msj:'Error al desloguear'});
+        }
+	})
+}
+
+
+router.post('/', verificaUsuario,verificaPass, autUser, (req, res) => {
   res.send(req.user);
 });
 
@@ -117,5 +135,14 @@ router.post('/registrar', validaExistencia, addUser, (req, res) => {
   res.send(req.user);
 });
 
+router.post('/logout', verificaUsuario, logout, (req, res) => {
+  console.log('Responde ',req.user)
+  res.send(req.user);
+});
+
+router.post('/verificauser', verificaToken, (req, res) => {
+  console.log('Responde ',req.user)
+  res.send(req.user);
+});
 
 module.exports = router;
