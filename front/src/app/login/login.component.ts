@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
 
   loginUser(username,pwd){
 this.placeholderService.loginUser(username,pwd)
+this.router.navigate(['posts'])
   }
 registrarUser(){
   this.router.navigate(['users']);

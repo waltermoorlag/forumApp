@@ -19,6 +19,7 @@ var LoginComponent = (function () {
     };
     LoginComponent.prototype.loginUser = function (username, pwd) {
         this.placeholderService.loginUser(username, pwd);
+        this.router.navigate(['posts']);
     };
     LoginComponent.prototype.registrarUser = function () {
         this.router.navigate(['users']);

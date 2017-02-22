@@ -1,11 +1,19 @@
 <div>
-  <div  *ngFor = "let comment of comments ; let ind_coment = index"  class="comment"><strong > {{comment.author.name}}:</strong> {{comment.body}}
-    <button  (click)="eliminar_comentario(comment._id,ind_coment)" class="remove-comment" >&times;</button>
-    <button  (click)="editar_comentario(comment._id,ind_coment)" class="edit-comment" >&#9998;</button>
+  <div  *ngFor = "let comment of comments ; let ind_coment = index"  class="comment">
+<div *ngIf= '!comment.isEdit' class="">
+    <strong class="nombre"> {{comment.author.name}}:</strong> {{comment.body}}
+    <button *ngIf=' (authorpost==username||comment.author.username==username)' (click)="eliminar_comentario(comment._id,ind_coment)" class="remove-comment" >&times;</button>
+    <button *ngIf=' comment.author.username==username'  (click)="editar_comentario(ind_coment)" class="edit-comment" >&#9998;</button>
+
+</div>
+<div *ngIf= 'comment.isEdit' class="">
+    <strong > {{comment.author.name}}:</strong>
+   <input  [focus]="focusSettingEventEmitter" #bodycommment   type="text" (keydown.escape)='editar_comentario(ind_coment)' (keydown.enter)='editComment(bodycommment.value, ind_coment,comment._id)' value="{{comment.body}}">
+</div>
+
 
   </div>
-  <div  class= "comment-form">
-  <input  class="form-control" type="text"  #author placeholder="Autor"/>
-  <input class="form-control" type="text" #input (keydown.enter)='comentar(input.value, author.value)' placeholder="Tu comentario" />
+  <div  class= "comment-form comentabody">
+  <input class="form-control comentabody" type="text" #input (keydown.enter)='comentar(input.value, username)' placeholder="Tu comentario" />
 </div>
 </div>

@@ -1,22 +1,26 @@
-import { Component, OnInit, Inject,ElementRef } from '@angular/core';
+import { Component, OnInit, Inject,ElementRef, Directive, Input, Renderer, EventEmitter } from '@angular/core';
 import {AppState, AppStore} from '../redux/store';
-import {Store} from 'redux';
+import {Store,Action} from 'redux';
 import{Post} from '../post.model';
 import {Comment} from './comment.model';
 import {PlaceholderService} from '../placeholder.service'
+import * as AppActions from '../redux/actions';
 
 @Component({
   selector: 'comments',
   templateUrl: './comments.component.html',
   styleUrls: ['./comments.component.css'],
-  inputs: ['comments','postId','indice']
+  inputs: ['comments','postId','indice','authorpost'],
 })
 export class CommentsComponent implements OnInit {
   comments: Comment[];
   postId: any;
   indice: number;
+  authorpost:string;
+  username:string;
+  public focusSettingEventEmitter = new EventEmitter<boolean>();
 
-  constructor(@Inject(AppStore) private store:Store<AppState>, private elemRef: ElementRef,public placeholderService: PlaceholderService) {
+  constructor(@Inject(AppStore) private store:Store<AppState>,@Inject(ElementRef) private elemRef: ElementRef,private renderer:Renderer, public placeholderService: PlaceholderService) {
 
     this.store.subscribe(() => this.readState())
     this.readState()
@@ -24,6 +28,7 @@ export class CommentsComponent implements OnInit {
 
    readState(){
      const state:AppState=this.store.getState();
+     this.username=state.user['username'];
      const arrPost:Post[] =state.posts.filter((item:any) => item._id == this.postId)
          if(arrPost.length>0){
 
@@ -45,10 +50,23 @@ export class CommentsComponent implements OnInit {
   eliminar_comentario(id:string,indice_comentario:number){
     this.placeholderService.deleteComment(this.postId,this.indice,indice_comentario,id)
   }
-  editar_comentario(id:string,indice_comentario:number){
-
+  editar_comentario(indice_comentario:number){
+    console.log('editando comment => ',indice_comentario)
+    this.store.dispatch(AppActions.editando_Comment(this.indice, indice_comentario))
+  }
+  editComment(cuerpo:string,indice_comentario:number,id:string){
+    this.placeholderService.editComment(cuerpo,this.indice,indice_comentario,id)
   }
   ngOnInit() {
   }
+
+    ngAfterViewInit() {
+        this.focusSettingEventEmitter.emit(true);
+    }
+    setFocus(): void {
+      this.focusSettingEventEmitter.emit(true);
+    }
+
+
+
 }
-// this.placeholderService.editComment(this.postId,this.indice,indice_comentario,id)

@@ -13,6 +13,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { PostComponent } from './post/post.component';
 import { PostsComponent } from './posts/posts.component';
 import { CommentsComponent } from './comments/comments.component';
+import { FocusDirective } from './focus.directive';
 
 const routes:Routes=[
 {path:"", redirectTo:"posts", pathMatch:"full"},
@@ -21,10 +22,7 @@ const routes:Routes=[
 {path:"profile", component: ProfileComponent},
 {path:"login",component:LoginComponent},
 {path:"post", component:PostComponent}
-
-]
-
-
+];
 
 @NgModule({
   declarations: [
@@ -34,15 +32,17 @@ const routes:Routes=[
     ProfileComponent,
     PostComponent,
     PostsComponent,
-    CommentsComponent
+    CommentsComponent,
+    FocusDirective
   ],
+
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     ReactiveFormsModule,
     RouterModule.forRoot(routes)
-  ],
+    ],
 
   providers: [{provide: LocationStrategy, useClass: HashLocationStrategy} ,{provide:AppStore, useValue:store},
   {provide: API_URL, useValue: API_URL},

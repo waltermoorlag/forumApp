@@ -1,6 +1,6 @@
-<div>
+<!-- <div>
     <form [formGroup] = 'formUser' (ngSubmit)='onSubmit(formUser.value)'>
-      
+
         <input type="text" name="username"       placeholder="username" [formControl]='formUser.controls.username' />
 
         <input type="text" name="password"       placeholder="password" [formControl]='formUser.controls.pwd' />
@@ -11,4 +11,40 @@
 
         <input type="submit">
     </form>
+</div> -->
+
+<div class="container">
+  <h2>Bienvenido a ForumApp</h2>
+  <form class="form-horizontal" [formGroup] = 'formUser' (ngSubmit)='onSubmit(formUser.value)'>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="email">Username:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" [formControl]='formUser.controls.username'  placeholder="Username">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="pwd">Password:</label>
+      <div class="col-sm-10">
+        <input type="password" class="form-control" [formControl]='formUser.controls.pwd' placeholder="Enter password">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="pwd">Repeat Password:</label>
+      <div class="col-sm-10">
+        <input type="password" class="form-control" [formControl]='formUser.controls.pwdrepeat' placeholder="Repeat password">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="pwd">Name:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" [formControl]='formUser.controls.name' placeholder="Your Name">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-default">Submit</button>
+      </div>
+    </div>
+  </form>
 </div>

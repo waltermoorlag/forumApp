@@ -42,7 +42,7 @@ cancelEdit(index:number){
 }
 
 eliminarPost(indicepost:number, postId:string){
-  // const user="test"
+
   this.placeholderService.deletePost(indicepost, postId, this.username)
 }
 }

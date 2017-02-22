@@ -89,8 +89,10 @@ export class PlaceholderService {
     }
 
 deleteComment(postId:any,indicePost:number,indice_comentario:number,commentId:any):void{
+console.log(commentId);
   this.http.delete(`${API_URL}comment/${commentId}`).
-  map(rta => {
+
+    map(rta => {
     return  rta.json()}).subscribe(obj=>{
       if(obj['error']){
         console.log(obj['msj'])
@@ -177,4 +179,24 @@ logout(username:string):void{
       })
 
   }
+  editComment(cuerpo:string,indexPost:number,indexComment:number, CommentId:string ):void{
+    let body= JSON.stringify({body:cuerpo});
+    let headers= new Headers({'Content-Type':'application/json'});
+    let options = new RequestOptions({headers: headers, withCredentials: true});
+    this.http.put(`${API_URL}comment/${CommentId}`,body,options).
+    map(rta => {
+      return  rta.json()}).subscribe(obj=>{
+        if(obj['error']){
+          console.log(obj['msj'])
+        }else{
+        this.store.dispatch(AppActions.edit_comment(indexPost,indexComment,obj))
+        }
+
+      })
+  }
+
+
+
+
+
 }

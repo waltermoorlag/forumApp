@@ -24,23 +24,32 @@ const initialState: AppState = {
 
 function postComments(state = [], action){
 	switch(action.type){
-	  case AppActions.CREATE_COMMENT:
 
-		console.log([...state,{
-			author: action.comment.author,
-			body: action.comment.body
-		}])
+		case AppActions.CREATE_COMMENT:
+	    return[...state,action.comment];
 
-	    return[...state,{
-	      author: action.comment.author,
-	      body: action.comment.body
-			}];
-	  case AppActions.DELETE_COMMENT:
+		case AppActions.DELETE_COMMENT:
 		  return[
 		    ...state.slice(0,action.indexComment),
 		    ...state.slice(action.indexComment +1)
 		  ];
-	   default:
+
+		case AppActions.EDIT_COMMENT:
+		console.log('comment recibido => ',action.comment)
+		  return[
+		    ...state.slice(0,action.indexComment),
+				Object.assign({},action.comment,{isEdit: false}),
+		    ...state.slice(action.indexComment +1)
+		  ];
+			case AppActions.EDITANDO_COMMENT:
+			  return[
+			    ...state.slice(0,action.indexComment),
+					Object.assign({},state[action.indexComment],{isEdit: !state[action.indexComment].isEdit }),
+			    ...state.slice(action.indexComment +1)
+			  ];
+
+
+		 default:
 	     return state;
 	}
 }
@@ -70,6 +79,7 @@ const reducer: Reducer<AppState> = (state: AppState = initialState, action: Acti
 			return Object.assign({},state,{isPosting:false, posts:[...state.posts, ...newPosts]});
 
 		case AppActions.EDITANDO_POST:
+
 		let indexEdit:number =  (<AppActions.commentAction>action).index
 		var postEditando = Object.assign({},state.posts[indexEdit],{ isEdit: !state.posts[indexEdit].isEdit});
 		return Object.assign({},state,{
@@ -116,11 +126,20 @@ const reducer: Reducer<AppState> = (state: AppState = initialState, action: Acti
 				});
 
 		case AppActions.EDIT_COMMENT:
-			return state;
+		let indexPostEditComment:number =  (<AppActions.commentEditAction>action).indexPost
+		var CommentPostEdit = Object.assign({},state.posts[indexPostEditComment],{ comments: postComments(state.posts[indexPostEditComment].comments,(<AppActions.commentAction>action))});
+		return Object.assign({},state,{
+						posts:[
+						...state.posts.slice(0,indexPostEditComment),
+						CommentPostEdit,
+						...state.posts.slice(indexPostEditComment+1)
+					]
+			});
+
 
 		case AppActions.DELETE_COMMENT:
-		let indexDele:number =  (<AppActions.commentDeleteAction>action).indexPost
-		var post = Object.assign({},state.posts[indexDele],{ comments: postComments(state.posts[indexDele].comments,(<AppActions.commentAction>action))});
+		let indexDele:number =  (<AppActions.commentIndiceAction>action).indexPost
+		var post = Object.assign({},state.posts[indexDele],{ comments: postComments(state.posts[indexDele].comments,(<AppActions.commentIndiceAction>action))});
 		return Object.assign({},state,{
 						posts:[
 						...state.posts.slice(0,indexDele),
@@ -128,12 +147,23 @@ const reducer: Reducer<AppState> = (state: AppState = initialState, action: Acti
 						...state.posts.slice(indexDele+1)
 					]
 			});
+			case AppActions.EDITANDO_COMMENT:
+			let indexediting:number =  (<AppActions.commentIndiceAction>action).indexPost
+			var post = Object.assign({},state.posts[indexediting],{ comments: postComments(state.posts[indexediting].comments,(<AppActions.commentIndiceAction>action))});
+			console.log('editand comment en el store: => indice post:',indexediting)
+			return Object.assign({},state,{
+							posts:[
+							...state.posts.slice(0,indexediting),
+							post,
+							...state.posts.slice(indexediting+1)
+						]
+				});
+
 
 		default:
 			return state;
 	}
 }
-
 
 const devtools: StoreEnhancer<AppState> = window["devToolsExtension"]?
 window["devToolsExtension"](): f=>f;

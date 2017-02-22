@@ -20,13 +20,13 @@
   </div>
 
   <div *ngIf="!post.isEdit" class="col-xs-12 panel-heading">
-      <div class="col-xs-9"> {{post.title}} </div>
+      <div class="col-xs-9"> <h4>{{post.title}}</h4> </div>
       <div class="col-xs-1"><strong> {{post.author.name}}</strong> </div>
 
 
 
      <div *ngIf='post.author.username==username'>
-      <div class="col-xs-1"><button (click)=eliminarPost(i,post._id) class="btn btn-danger">Eliminar</button></div>
+      <div class="col-xs-1 "><button  (click)=eliminarPost(i,post._id) class="alejar btn btn-danger">Eliminar</button></div>
       <div class="col-xs-1"><button (click)=editarPost(i) class="btn btn-info">Edit</button></div>
     </div>
 
@@ -34,5 +34,5 @@
   <div *ngIf="!post.isEdit" class="panel-body">{{post.body}}</div>
   <div class="panel-footer">{{post.date}}</div>
 
-  <comments [indice]='i' [postId]='post._id' [comments]='post.comments'></comments>
+  <comments [indice]='i' [postId]='post._id' [authorpost]='post.author.username' [comments]='post.comments' ></comments>
 </div>

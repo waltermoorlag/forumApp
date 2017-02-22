@@ -15,7 +15,7 @@ export class UserComponent implements OnInit {
 
 	constructor(fb: FormBuilder, public placeholderService: PlaceholderService, public router:Router ){
 		this.formUser = fb.group({
-			name:[''], 
+			name:[''],
   			username: [''],
         	pwd:[''],
 			pwdrepeat:['']
@@ -23,8 +23,8 @@ export class UserComponent implements OnInit {
 	}
 
 	onSubmit(formUser):void{
-        
-        const aUser= new User ({         
+
+        const aUser= new User ({
          	name: formUser.name,
   			username:formUser.username,
         	pwd:formUser.pwd,
@@ -36,18 +36,17 @@ export class UserComponent implements OnInit {
 		if(obj['error']){
 			console.log(obj['msj'])
 		}else{
-			this.router.navigate(["/login"])
+			this.router.navigate(["posts"])
 		}
 
 	})
 
 	}
-  
+
 
   ngOnInit() {
   }
 
-  
 
 
 }

@@ -7,6 +7,28 @@
   vertical-align:middle;
 }
 .empuja{
-  width:80%;
+  width:60%;
   float: left;
+}
+.postear{
+  padding:10px;
+border:1px solid blue;
+width:200px;
+border-radius:5px;
+  margin-left:30%;
+}
+.navbar{
+  padding-top:10px;
+  padding-right:5px;
+  padding-bottom: 10px;
+}
+.centrar{
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+
+}
+.alejar{
+  margin-right:10px;
 }

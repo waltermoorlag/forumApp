@@ -1,6 +1,6 @@
-<form action="" (submit)="loginUser(username.value,pwd.value)">
+<form class="" action="" (submit)="loginUser(username.value,pwd.value)">
 	Usuario: <input #username type="text" id="user">
-	Password: <input #pwd type="text" id="password">
-	<input type="submit">
+	Password: <input #pwd type="password" id="password">
+	<input class="btn btn-info" value="Aceptar" type="submit">
+	<button class="btn btn-warning" (click)="registrarUser()">Registrarse</button>
 </form>
-<button (click)="registrarUser()">Registrarse</button>

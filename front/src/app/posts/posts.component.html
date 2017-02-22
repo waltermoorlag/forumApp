@@ -1,12 +1,29 @@
 <div *ngIf="!islogged">
-  <login></login>
+  <nav class="navbar navbar-inverse" style="background-color: #e3f2fd;">
+    <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="centrar navbar-brand" href="#"></a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li class="centrar"><login></login></li>
+        </ul>
+      </div>
+  </nav>
 </div>
-<div *ngIf="islogged">Bienvenido {{username}}
-  <button (click)='logout_user()'>&#10060;</button>
+<div *ngIf="islogged">
+  <nav class="navbar navbar-inverse" style="background-color: #e3f2fd;">
+    <div class="container-fluid">
+    <ul class="nav navbar-nav navbar-right">
+<li class="alejar">  <span class="btn btn-default">Bienvenido {{username}} </span></li>
+<li>  <button class="btn btn-success" (click)='logout_user()'>Logout</button></li>
+      </ul>
+  <div *ngIf="!isPosting">
+<button class="btn btn-success" (click)=fcShowPost()>Postear</button>
+    </div>
+  </div>
+  </nav>
 </div>
-
-
-<div *ngIf="isPosting">
+<div class="postear" *ngIf="isPosting">
     <form [formGroup] = 'formPost' (ngSubmit)='onSubmit(formPost.value)'>
         <input type="text" name="title"       placeholder="title" [formControl]='formPost.controls.title' />
 <br><br>
@@ -16,8 +33,6 @@
         <button (click)=fcHidePost() >Ocultar</button>
     </form>
 </div>
-<div *ngIf="!isPosting">
-  <button (click)=fcShowPost() >POSTEAR</button>
-</div>
+
 <br><br>
-<post></post>
+<post ></post>
