@@ -12,8 +12,9 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 // import * as index from './routes/index';
 const index = require('./routes/index');
-// import * as users from './routes/users';
-const users = require('./routes/users');
+const login = require('./routes/login');
+const posts = require('./routes/posts');
+const comments = require('./routes/comments');
 
 const app = express();
 
@@ -39,7 +40,7 @@ const allowCrossDomain = function(req, res, next) {
     // intercept OPTIONS method
     if ('OPTIONS'==req.method) {
       res.set({
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'http://localhost:4200',
         'Access-Control-Allow-Credentials': true,
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
         'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Accept, Header, Content-Type, access-control-allow-origin',
@@ -48,7 +49,7 @@ const allowCrossDomain = function(req, res, next) {
       return res.sendStatus(200);
     }
     res.set({
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': 'http://localhost:4200',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
       'Access-Control-Allow-Headers':"header, Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Mx-ReqToken,Keep-Alive,X-Requested-With,If-Modified-Since",
       'Access-Control-Allow-Credentials': true
@@ -58,9 +59,16 @@ const allowCrossDomain = function(req, res, next) {
 app.use(allowCrossDomain);
 
 
+const retardo = (req, res, next) => {
+  setTimeout( () => next() , 4000);
+}
 
 app.use('/', index);
-app.use('/users', users);
+// app.all('/',login)
+app.use('/login', login);
+app.use('/post', posts);
+app.use('/comment', comments);
+
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

@@ -5,7 +5,8 @@ var ObjectId=mongoose.Schema.Types.ObjectId;
 const Comment = new mongoose.Schema({
   body:  { type: String, required: true, unique: true },
   author:  { type: ObjectId, ref: "users"},
-  post:{ type: ObjectId, ref: "posts"},
+  date :{ type: Date},
+  isEdit: {type: Boolean}
 }, {
   collections: 'comments',
 });
