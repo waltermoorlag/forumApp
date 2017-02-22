@@ -60,10 +60,20 @@ const newComment = (req, res, next) => {
 };
 
 const editComment = (req, res, next) => {
-   Comment.findOneAndUpdate({_id:req.params.comentId}, req.body, function (err, result) {
+	console.log('id de comment ',req.params.comentId)
+	console.log('body de comment ',req.body)
+
+   Comment.findOneAndUpdate({_id:req.params.comentId}, { body: req.body.body }, function (err, result) {
     if (!err){
-      req.comment = result;
-      next();
+	  Comment.findOne( {_id:req.params.comentId } ).populate('author').exec((err, result) => {
+	  	if (!err) {
+	  		req.comment=result;
+	  		console.log(req.comment)
+	  		next()
+	  	}else{
+			res.send({error: true, msj:'Error al obtener nombre del usuario del comentario'});
+	  	}
+	  })
     } else {
       res.send({error: true, msj:'Error al actualizar comentario '});
     }

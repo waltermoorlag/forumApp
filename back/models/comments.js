@@ -6,6 +6,7 @@ const Comment = new mongoose.Schema({
   body:  { type: String, required: true, unique: true },
   author:  { type: ObjectId, ref: "users"},
   date :{ type: Date},
+  isEdit: {type: Boolean}
 }, {
   collections: 'comments',
 });
